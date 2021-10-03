@@ -22,7 +22,7 @@ public:
 	/**
 	 * the total episodes to run
 	 * the block size of statistic
-	 * the limit of saving records
+	 * the limit of saving records (episodes)
 	 *
 	 * note that total >= limit >= block
 	 */

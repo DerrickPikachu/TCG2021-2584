@@ -56,6 +56,13 @@ public:
 	bool operator <=(const board& b) const { return !(b < *this); }
 	bool operator >=(const board& b) const { return !(*this < b); }
 
+	static uint32_t map_to_fibonacci(uint32_t index) {
+	    static uint32_t fibonacci[] = {0, 1, 2, 3, 5, 8, 13, 21,
+                                34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657,
+                                46368, 75025};
+	    return fibonacci[index];
+	}
+
 public:
 
 	/**
@@ -83,6 +90,10 @@ public:
 		}
 	}
 
+	/**
+	 * TODO: Important in this lab
+	 * In grid, tile hold the exponent value of 2.
+	 */
 	reward slide_left() {
 		board prev = *this;
 		reward score = 0;
@@ -173,7 +184,8 @@ public:
 		out << "+------------------------+" << std::endl;
 		for (auto& row : b.tile) {
 			out << "|" << std::dec;
-			for (auto t : row) out << std::setw(6) << ((1 << t) & -2u);
+//			for (auto t : row) out << std::setw(6) << ((1 << t) & -2u);
+            for (auto t : row) out << std::setw(6) << map_to_fibonacci(t);
 			out << "|" << std::endl;
 		}
 		out << "+------------------------+" << std::endl;
