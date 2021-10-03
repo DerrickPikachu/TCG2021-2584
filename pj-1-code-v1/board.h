@@ -64,7 +64,7 @@ public:
 	    return fibonacci[index];
 	}
 
-//	static uint32_t map_to_index(uint32_t fib) {
+//	static int map_to_index(uint32_t fib) {
 //
 //	}
 
