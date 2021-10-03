@@ -125,7 +125,7 @@ public:
         int max_reward = 0, best_op = -1;
         for (int op : opcode) {
             board::reward reward = board(before).slide(op);
-            if (reward != -1 && max_reward < reward) {
+            if (reward != -1 && max_reward <= reward) {
                 max_reward = reward;
                 best_op = op;
             }
