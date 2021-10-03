@@ -56,10 +56,11 @@ public:
 	bool operator <=(const board& b) const { return !(b < *this); }
 	bool operator >=(const board& b) const { return !(*this < b); }
 
-	static uint32_t map_to_fibonacci(uint32_t index) {
-	    static uint32_t fibonacci[] = {0, 1, 2, 3, 5, 8, 13, 21,
-                                34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657,
-                                46368, 75025};
+	static int map_to_fibonacci(uint32_t index) {
+	    static int fibonacci[] = {0, 1, 2, 3, 5, 8, 13, 21, 34,
+                                       55, 89, 144, 233, 377, 610,
+                                       987, 1597, 2584, 4181, 6765,
+                                       10946, 17711, 28657,46368, 75025};
 	    return fibonacci[index];
 	}
 
@@ -94,6 +95,10 @@ public:
 		}
 	}
 
+	bool can_combine(int tile1, int tile2) {
+	    return (tile1 == 1 && tile1 == tile2) || (abs(tile1 - tile2) == 1);
+	}
+
 	/**
 	 * TODO: Important in this lab
 	 * In grid, tile hold the exponent value of 2.
@@ -109,9 +114,10 @@ public:
 				if (tile == 0) continue;
 				row[c] = 0;
 				if (hold) {
-					if (tile == hold) {
-						row[top++] = ++tile;
-						score += (1 << tile);
+					if (can_combine(tile, hold)) {
+					    int bigger = std::max(tile, hold) + 1;
+						row[top++] = bigger;
+						score += map_to_fibonacci(bigger);
 						hold = 0;
 					} else {
 						row[top++] = hold;
