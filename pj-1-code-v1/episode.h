@@ -174,8 +174,11 @@ protected:
 		return std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
 	}
 
+public:
+    board ep_state;
+
 private:
-	board ep_state;
+//	board ep_state;
 	board::reward ep_score;
 	std::vector<move> ep_moves;
 	time_t ep_time;
