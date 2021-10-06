@@ -142,16 +142,35 @@ public:
         int score = 0;
         for (std::array<int, 4> tuple : tuples) {
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < (int)tuple.size() - 1; j++) {
-                    if (board::can_combine(after(tuple[j]), after(tuple[j+1]))) {
-                        int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
-                        score += board::map_to_fibonacci(bigger_tile + 1);
-                    }
-                }
+                score += cal_decreasing_score(tuple, after);
                 after.rotate_left();
             }
         }
+        score += cal_space_score(after);
         return score;
+    }
+
+    int cal_decreasing_score(std::array<int, 4>& tuple, board& after) {
+        bool is_decreasing = true, is_increasing = true;
+        int score = 0;
+        for (int i = 1; i < (int)tuple.size(); i++) {
+            score += board::map_to_fibonacci(after(tuple[i]));
+            if (after(tuple[i]) == after(tuple[i-1]))
+                return 0;
+            else if (after(tuple[i]) > after(tuple[i-1]))
+                is_decreasing = false;
+            else
+                is_increasing = false;
+        }
+        return (is_decreasing || is_increasing)? score : 0;
+    }
+
+    int cal_space_score(board& after) {
+        int space_counter = 0, space_factor = 5;
+        for (int i = 0; i < 16; i++) {
+            space_counter += (after(i) == 0)? 1 : 0;
+        }
+        return space_counter * space_factor;
     }
 
 private:
