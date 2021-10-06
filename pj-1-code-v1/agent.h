@@ -144,9 +144,9 @@ public:
                     if (board::can_combine(tuple[j], tuple[j+1])) {
                         int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
                         score += board::map_to_fibonacci(bigger_tile + 1);
-                        std::cout << score << std::endl;
                     }
                 }
+                std::cout << score << std::endl;
                 after.rotate_left();
             }
         }
