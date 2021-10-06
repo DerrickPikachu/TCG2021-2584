@@ -125,11 +125,12 @@ public:
         tuples(tuple) {}
 
     virtual action take_action(const board& before) {
-        int max_reward = 0, best_op = -1;
+        int max_score = 0, best_op = -1;
         for (int op : opcode) {
             board::reward reward = board(before).slide(op);
-            if (reward != -1 && max_reward < reward) {
-                max_reward = reward;
+            int critic = evaluate_board(before);
+            if (reward != -1 && max_score <= reward + critic) {
+                max_score = reward + critic;
                 best_op = op;
             }
         }
@@ -147,7 +148,6 @@ public:
                         score += board::map_to_fibonacci(bigger_tile + 1);
                     }
                 }
-                std::cout << score << std::endl;
                 after.rotate_left();
             }
         }
