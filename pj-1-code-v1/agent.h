@@ -17,6 +17,7 @@
 #include "board.h"
 #include "action.h"
 #include <fstream>
+#include <vector>
 
 class agent {
 public:
@@ -116,10 +117,12 @@ private:
 	std::array<int, 4> opcode;
 };
 
-class GreedyPlayer : public agent {
+class HeuristicPlayer : public agent {
 public:
-    GreedyPlayer(const std::string& args="") : agent("name=greedy role=player " + args),
-        opcode({0, 1, 2, 3}) {}
+    HeuristicPlayer(std::vector<std::array<int, 4>> tuple, const std::string& args="") :
+        agent("name=greedy role=player " + args),
+        opcode({0, 1, 2, 3}),
+        tuples(tuple) {}
 
     virtual action take_action(const board& before) {
         int max_reward = 0, best_op = -1;
@@ -133,6 +136,23 @@ public:
         return (best_op != -1)? action::slide(best_op) : action();
     }
 
+    int evaluate_board(board& after) {
+        int score = 0;
+        for (std::array<int, 4> tuple : tuples) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < tuple.size(); j++) {
+                    if (board::can_combine(tuple[j], tuple[j+1])) {
+                        int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
+                        score += board::map_to_fibonacci(bigger_tile);
+                    }
+                }
+                after.rotate_left();
+            }
+        }
+        return score;
+    }
+
 private:
     std::array<int, 4> opcode;
+    std::vector<std::array<int, 4>> tuples;
 };
