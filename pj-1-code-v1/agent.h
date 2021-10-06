@@ -166,7 +166,7 @@ public:
     }
 
     int cal_space_score(board& after) {
-        int space_counter = 0, space_factor = 5;
+        int space_counter = 0, space_factor = 100;
         for (int i = 0; i < 16; i++) {
             space_counter += (after(i) == 0)? 1 : 0;
         }
