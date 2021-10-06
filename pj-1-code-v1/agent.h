@@ -140,7 +140,7 @@ public:
         int score = 0;
         for (std::array<int, 4> tuple : tuples) {
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < tuple.size(); j++) {
+                for (int j = 0; j < (int)tuple.size(); j++) {
                     if (board::can_combine(tuple[j], tuple[j+1])) {
                         int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
                         score += board::map_to_fibonacci(bigger_tile);
