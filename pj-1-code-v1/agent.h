@@ -127,8 +127,8 @@ public:
     virtual action take_action(const board& before) {
         int max_score = 0, best_op = -1;
         for (int op : opcode) {
-            board::reward reward = board(before).slide(op);
             board after = before;
+            board::reward reward = after.slide(op);
             int critic = evaluate_board(after);
             if (reward != -1 && max_score <= reward + critic) {
                 max_score = reward + critic;
@@ -149,6 +149,19 @@ public:
         score += cal_space_score(after);
         return score;
     }
+
+//    int tree_search(board& after, int search_depth=1) {
+//        if (search_depth == 0)
+//            return 0;
+//        int best_score = 0;
+//        for (int op : opcode) {
+//            board::reward reward = after.slide(op);
+//            int score = 0;
+//            if (reward != -1) {
+//                score = reward + tree_search()
+//            }
+//        }
+//    }
 
     int cal_decreasing_score(std::array<int, 4>& tuple, board& after) {
         bool is_decreasing = true, is_increasing = true;
