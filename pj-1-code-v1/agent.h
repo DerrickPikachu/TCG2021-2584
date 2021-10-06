@@ -141,8 +141,8 @@ public:
         for (std::array<int, 4> tuple : tuples) {
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < (int)tuple.size() - 1; j++) {
-                    std::cout << after(tuple[j]) << " " << after(tuple[j+1]) << std::endl;
                     if (board::can_combine(after(tuple[j]), after(tuple[j+1]))) {
+                        std::cout << after(tuple[j]) << " " << after(tuple[j+1]) << std::endl;
                         int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
                         score += board::map_to_fibonacci(bigger_tile + 1);
                     }

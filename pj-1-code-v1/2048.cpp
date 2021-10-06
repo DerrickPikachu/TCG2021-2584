@@ -18,13 +18,13 @@
 #include "statistic.h"
 
 int main(int argc, const char* argv[]) {
-    board game;
     HeuristicPlayer player({{0, 1, 2, 3}}, "");
     std::array<std::array<uint32_t , 4>, 4> grid;
     grid[0] = {1, 1, 2, 3};
     grid[1] = {0, 0, 0, 0};
     grid[2] = {0, 0, 0, 0};
     grid[3] = {0, 0, 0, 0};
+    board game(grid);
     std::cout << player.evaluate_board(game) << std::endl;
 //	std::cout << "2048-Demo: ";
 //	std::copy(argv, argv + argc, std::ostream_iterator<const char*>(std::cout, " "));
