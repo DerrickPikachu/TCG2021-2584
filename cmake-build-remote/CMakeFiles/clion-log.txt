@@ -1,6 +1,0 @@
-/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/bin/make -G "CodeBlocks - Unix Makefiles" /tmp/tmp.TNQOrwPFUz
-CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
-  CMake 3.20 or higher is required.  You are running version 3.18.3
-
-
--- Configuring incomplete, errors occurred!
