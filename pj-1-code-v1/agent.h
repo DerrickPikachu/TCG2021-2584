@@ -143,7 +143,7 @@ public:
                 for (int j = 0; j < (int)tuple.size() - 1; j++) {
                     if (board::can_combine(tuple[j], tuple[j+1])) {
                         int bigger_tile = std::max(after(tuple[j]), after(tuple[j+1]));
-                        score += board::map_to_fibonacci(bigger_tile);
+                        score += board::map_to_fibonacci(bigger_tile + 1);
                     }
                 }
                 after.rotate_left();
