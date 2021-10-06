@@ -56,7 +56,7 @@ int main(int argc, const char* argv[]) {
 		summary |= stat.is_finished();
 	}
 
-	player play(play_args);
+	HeuristicPlayer play({{0, 1, 2, 3}}, play_args);
 	rndenv evil(evil_args);
 
 	while (!stat.is_finished()) {
