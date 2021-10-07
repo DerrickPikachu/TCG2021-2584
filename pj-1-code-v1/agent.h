@@ -117,6 +117,27 @@ private:
 	std::array<int, 4> opcode;
 };
 
+class GreedyPlayer : public agent {
+public:
+    GreedyPlayer(const std::string& args="") : agent("name=greedy role=player " + args),
+                                               opcode({0, 1, 2, 3}) {}
+
+    virtual action take_action(const board& before) {
+        int max_reward = 0, best_op = -1;
+        for (int op : opcode) {
+            board::reward reward = board(before).slide(op);
+            if (reward != -1 && max_reward <= reward) {
+                max_reward = reward;
+                best_op = op;
+            }
+        }
+        return (best_op != -1)? action::slide(best_op) : action();
+    }
+
+private:
+    std::array<int, 4> opcode;
+};
+
 class HeuristicPlayer : public agent {
 public:
     HeuristicPlayer(std::vector<std::array<int, 4>> tuple, const std::string& args="") :
