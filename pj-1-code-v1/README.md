@@ -39,6 +39,13 @@ To load and review the statistic result from a file:
 ./2048 --load=stat.txt
 ```
 
+## Choose Agent
+```bash
+./2048 # Random policy
+./2048 --play=greedy
+./2048 --play=heuristic
+```
+
 ## Author
 
 [Computer Games and Intelligence (CGI) Lab](https://cgilab.nctu.edu.tw/), NYCU, Taiwan
