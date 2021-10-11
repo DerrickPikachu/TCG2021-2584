@@ -181,20 +181,20 @@ private:
                 after.rotate_left();
             }
         }
-        score += cal_space_score(after) + cal_maxtile_score(after);
+        score += cal_space_score(after);
         return score;
     }
 
     int cal_maxtile_score(board& after) {
-        int max_tile = -1, pos = -1;
+        int max_tile = 0, pos = -1;
         for (int i = 0; i < 16; i++) {
-            if (after(i) > max_tile) {
+            if (after(i) > (uint32_t)max_tile) {
                 max_tile = after(i);
                 pos = i;
             }
         }
         if (pos == 0 || pos == 3 || pos == 12 || pos == 15)
-            return board::map_to_fibonacci(after(pos));
+            return max_tile;
         return 0;
     }
 
