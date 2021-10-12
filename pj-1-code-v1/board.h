@@ -64,6 +64,10 @@ public:
 	    return fibonacci[index];
 	}
 
+    static bool can_combine(int tile1, int tile2) {
+        return tile1 != 0 && tile2 != 0 && ((tile1 == 1 && tile1 == tile2) || (std::abs(tile1 - tile2) == 1));
+    }
+
 //	static int map_to_index(uint32_t fib) {
 //
 //	}
@@ -93,10 +97,6 @@ public:
 		case 3: return slide_left();
 		default: return -1;
 		}
-	}
-
-	bool can_combine(int tile1, int tile2) {
-	    return (tile1 == 1 && tile1 == tile2) || (abs(tile1 - tile2) == 1);
 	}
 
 	/**
