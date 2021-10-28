@@ -106,7 +106,6 @@ public:
             previous_after_state = best_after;
             return action::slide(best_op);
         } else {
-            std::cout << "end of episode" << std::endl;
             update_net(0);
             return action();
         }
