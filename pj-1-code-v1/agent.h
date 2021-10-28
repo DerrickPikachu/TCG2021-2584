@@ -176,29 +176,25 @@ private:
 	}
 
 	void update_net(const board& state, float target) {
-	    if (!first_state) {
-            float delta = (target - evaluate_board(previous_after_state));
-            float adjust = alpha * delta / 16;
-            board tem = previous_after_state;
-            for (int i = 0; i < 4; i++) {
-                net[0][extract_feature(tem, {0, 1, 2, 3, 4})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
-                net[1][extract_feature(tem, {0, 1, 2, 3, 7})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
-                net[2][extract_feature(tem, {4, 5, 6, 7, 8})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
-                net[3][extract_feature(tem, {4, 5, 6, 7, 11})] += adjust;
-                tem.rotate_left();
-            }
-        } else {
-	        first_state = false;
-	    }
+        float delta = (target - evaluate_board(state));
+        float adjust = alpha * delta / 16;
+        board tem = state;
+        for (int i = 0; i < 4; i++) {
+            net[0][extract_feature(tem, {0, 1, 2, 3, 4})] += adjust;
+            tem.rotate_left();
+        }
+        for (int i = 0; i < 4; i++) {
+            net[1][extract_feature(tem, {0, 1, 2, 3, 7})] += adjust;
+            tem.rotate_left();
+        }
+        for (int i = 0; i < 4; i++) {
+            net[2][extract_feature(tem, {4, 5, 6, 7, 8})] += adjust;
+            tem.rotate_left();
+        }
+        for (int i = 0; i < 4; i++) {
+            net[3][extract_feature(tem, {4, 5, 6, 7, 11})] += adjust;
+            tem.rotate_left();
+        }
 	}
 
 	struct step {
@@ -211,7 +207,6 @@ private:
 protected:
 	std::vector<weight> net;
 	float alpha;
-	board previous_after_state;
 };
 
 /**
