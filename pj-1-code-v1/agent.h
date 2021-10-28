@@ -158,7 +158,7 @@ private:
 	}
 
 	void update_net(float target) {
-	    float delta = (target - evaluate_board(previous_after_state)) / 8;
+	    float delta = (target - evaluate_board(previous_after_state));
         net[0][extract_feature(previous_after_state, {0, 1, 2, 3})] += alpha * delta;
         net[1][extract_feature(previous_after_state, {4, 5, 6, 7})] += alpha * delta;
         net[2][extract_feature(previous_after_state, {8, 9, 10, 11})] += alpha * delta;
