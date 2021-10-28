@@ -74,8 +74,7 @@ protected:
 class player : public agent {
 public:
 	player(const std::string& args = "") :
-	    agent("name=td_agent role=environment " + args), alpha(0),
-	    opcode({0, 1, 2, 3}) {
+	    agent("name=td_agent role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
@@ -89,21 +88,25 @@ public:
 	}
 
     virtual action take_action(const board& before) {
-	    float max_target_value = 0;
+	    float max_target_value = -100000;
 	    int best_op = -1;
-        for (int op : opcode) {
+	    board best_after;
+        for (int op : {0, 1, 2, 3}) {
             board after = before;
             board::reward reward = after.slide(op);
             float expected_value = evaluate_board(after);
             if (reward != -1 && max_target_value < expected_value + (float)reward) {
                 max_target_value = expected_value + (float)reward;
                 best_op = op;
+                best_after = after;
             }
         }
         if (best_op != -1) {
-            update_net(before, max_target_value);
+            update_net(max_target_value);
+            previous_after_state = best_after;
             return action::slide(best_op);
         } else {
+            update_net(0);
             return action();
         }
     }
@@ -135,17 +138,41 @@ protected:
 
 private:
     float evaluate_board(const board& b) {
-	    return 0;
+	    float value = 0;
+	    value += net[0][extract_feature(b, {0, 1, 2, 3})];
+        value += net[1][extract_feature(b, {4, 5, 6, 7})];
+        value += net[2][extract_feature(b, {8, 9, 10, 11})];
+        value += net[3][extract_feature(b, {12, 13, 14, 15})];
+        value += net[4][extract_feature(b, {0, 4, 8, 12})];
+        value += net[5][extract_feature(b, {1, 5, 9, 13})];
+        value += net[6][extract_feature(b, {2, 6, 10, 14})];
+        value += net[0][extract_feature(b, {3, 7, 11, 15})];
+        return value;
 	}
 
-	void update_net(const board& b, float reward) {
-	    return;
+	int extract_feature(const board& b, std::vector<int> tiles) {
+	    int feature = 0;
+	    for (int i = 0; i < tiles.size(); i++)
+	        feature += b(tiles[i]) * pow(25, tiles.size() - 1 - i);
+	    return feature;
+	}
+
+	void update_net(float target) {
+	    float delta = (target - evaluate_board(previous_after_state)) / 8;
+        net[0][extract_feature(previous_after_state, {0, 1, 2, 3})] += alpha * delta;
+        net[1][extract_feature(previous_after_state, {4, 5, 6, 7})] += alpha * delta;
+        net[2][extract_feature(previous_after_state, {8, 9, 10, 11})] += alpha * delta;
+        net[3][extract_feature(previous_after_state, {12, 13, 14, 15})] += alpha * delta;
+        net[4][extract_feature(previous_after_state, {0, 4, 8, 12})] += alpha * delta;
+        net[5][extract_feature(previous_after_state, {1, 5, 9, 13})] += alpha * delta;
+        net[6][extract_feature(previous_after_state, {2, 6, 10, 14})] += alpha * delta;
+        net[7][extract_feature(previous_after_state, {3, 7, 11, 15})] += alpha * delta;
 	}
 
 protected:
 	std::vector<weight> net;
 	float alpha;
-	std::array<int, 4> opcode;
+	board previous_after_state;
 };
 
 /**
