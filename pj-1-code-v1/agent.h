@@ -96,7 +96,7 @@ public:
             board after = before;
             board::reward reward = after.slide(op);
             float expected_value = evaluate_board(after);
-            if (best_reward + value < (float)reward + expected_value) {
+            if (reward != -1 && best_reward + value < (float)reward + expected_value) {
                 value = expected_value;
                 best_reward = reward;
                 best_op = op;
