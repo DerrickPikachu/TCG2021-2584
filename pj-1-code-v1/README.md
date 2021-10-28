@@ -43,22 +43,22 @@ To load and review the statistic result from a file:
 
 To initialize the network, train the network for 100000 games, and save the weights to a file:
 ```bash
-./2048 --total=100000 --block=1000 --limit=1000 --play="init save=weights.bin" # need to inherit from weight_agent
+./2048 --total=100000 --block=1000 --limit=1000 --play="init save=weights.bin" # need to inherit from player
 ```
 
 To load the weights from a file, train the network for 100000 games, and save the weights:
 ```bash
-./2048 --total=100000 --block=1000 --limit=1000 --play="load=weights.bin save=weights.bin" # need to inherit from weight_agent
+./2048 --total=100000 --block=1000 --limit=1000 --play="load=weights.bin save=weights.bin" # need to inherit from player
 ```
 
 To train the network for 1000 games, with a specific learning rate:
 ```bash
-./2048 --total=1000 --play="init alpha=0.0025" # need to inherit from weight_agent
+./2048 --total=1000 --play="init alpha=0.0025" # need to inherit from player
 ```
 
 To load the weights from a file, test the network for 1000 games, and save the statistic:
 ```bash
-./2048 --total=1000 --play="load=weights.bin alpha=0" --save="stat.txt" # need to inherit from weight_agent
+./2048 --total=1000 --play="load=weights.bin alpha=0" --save="stat.txt" # need to inherit from player
 ```
 
 To perform a long training with periodic evaluations and network snapshots:

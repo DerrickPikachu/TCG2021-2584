@@ -71,9 +71,10 @@ protected:
 /**
  * base agent for agents with weight tables and a learning rate
  */
-class weight_agent : public agent {
+class player : public agent {
 public:
-	weight_agent(const std::string& args = "") : agent(args), alpha(0),
+	player(const std::string& args = "") :
+	    agent("name=td_agent role=environment " + args), alpha(0),
 	    opcode({0, 1, 2, 3}) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
@@ -82,7 +83,7 @@ public:
 		if (meta.find("alpha") != meta.end())
 			alpha = float(meta["alpha"]);
 	}
-	virtual ~weight_agent() {
+	virtual ~player() {
 		if (meta.find("save") != meta.end())
 			save_weights(meta["save"]);
 	}
@@ -156,7 +157,7 @@ protected:
 class rndenv : public random_agent {
 public:
 	rndenv(const std::string& args = "") : random_agent("name=random role=environment " + args),
-		space({ 0, 1, 2, 3, 4, 5, 6,
+	    space({ 0, 1, 2, 3, 4, 5, 6,
                 7, 8, 9, 10, 11, 12, 13,
                 14, 15 }), popup(0, 9) {}
 
@@ -176,13 +177,14 @@ private:
 };
 
 /**
- * dummy player
+ * dummy DummyPlayer
  * select a legal action randomly
  */
-class player : public random_agent {
+class DummyPlayer : public random_agent {
 public:
-	player(const std::string& args = "") : random_agent("name=dummy role=player " + args),
-		opcode({ 0, 1, 2, 3 }),
+	DummyPlayer(const std::string& args = "") :
+	    random_agent("name=dummy role=DummyPlayer " + args),
+        opcode({ 0, 1, 2, 3 }),
         tuples({{0, 1, 2, 3}}),
         play_type(args) {}
 

@@ -50,7 +50,7 @@ public:
 	 *  'avg = 273901': the average score is 273901
 	 *  'max = 382324': the maximum score is 382324
 	 *  'ops = 241563 (170543|896715)': the average speed is 241563
-	 *                                  the average speed of player is 170543
+	 *                                  the average speed of DummyPlayer is 170543
 	 *                                  the average speed of environment is 896715
 	 *  '93.7%': 93.7% (937 games) reached 8192-tiles (a.k.a. win rate of 8192-tile)
 	 *  '22.4%': 22.4% (224 games) terminated with 8192-tiles (the largest)
