@@ -87,6 +87,10 @@ public:
 			save_weights(meta["save"]);
 	}
 
+    virtual void open_episode(const std::string& flag = "") {
+	    first_state = true;
+	}
+
     virtual action take_action(const board& before) {
 	    float max_target_value = -100000;
 	    int best_op = -1;
@@ -160,21 +164,26 @@ private:
 	}
 
 	void update_net(float target) {
-	    float delta = (target - evaluate_board(previous_after_state));
-        net[0][extract_feature(previous_after_state, {0, 1, 2, 3})] += alpha * delta;
-        net[1][extract_feature(previous_after_state, {4, 5, 6, 7})] += alpha * delta;
-        net[2][extract_feature(previous_after_state, {8, 9, 10, 11})] += alpha * delta;
-        net[3][extract_feature(previous_after_state, {12, 13, 14, 15})] += alpha * delta;
-        net[4][extract_feature(previous_after_state, {0, 4, 8, 12})] += alpha * delta;
-        net[5][extract_feature(previous_after_state, {1, 5, 9, 13})] += alpha * delta;
-        net[6][extract_feature(previous_after_state, {2, 6, 10, 14})] += alpha * delta;
-        net[7][extract_feature(previous_after_state, {3, 7, 11, 15})] += alpha * delta;
+	    if (!first_state) {
+            float delta = (target - evaluate_board(previous_after_state));
+            net[0][extract_feature(previous_after_state, {0, 1, 2, 3})] += alpha * delta;
+            net[1][extract_feature(previous_after_state, {4, 5, 6, 7})] += alpha * delta;
+            net[2][extract_feature(previous_after_state, {8, 9, 10, 11})] += alpha * delta;
+            net[3][extract_feature(previous_after_state, {12, 13, 14, 15})] += alpha * delta;
+            net[4][extract_feature(previous_after_state, {0, 4, 8, 12})] += alpha * delta;
+            net[5][extract_feature(previous_after_state, {1, 5, 9, 13})] += alpha * delta;
+            net[6][extract_feature(previous_after_state, {2, 6, 10, 14})] += alpha * delta;
+            net[7][extract_feature(previous_after_state, {3, 7, 11, 15})] += alpha * delta;
+        } else {
+	        first_state = false;
+	    }
 	}
 
 protected:
 	std::vector<weight> net;
 	float alpha;
 	board previous_after_state;
+	bool first_state;
 };
 
 /**
