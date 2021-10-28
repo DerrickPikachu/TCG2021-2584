@@ -73,7 +73,8 @@ protected:
  */
 class weight_agent : public agent {
 public:
-	weight_agent(const std::string& args = "") : agent(args), alpha(0) {
+	weight_agent(const std::string& args = "") : agent(args), alpha(0),
+	    opcode({0, 1, 2, 3}) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
@@ -86,10 +87,32 @@ public:
 			save_weights(meta["save"]);
 	}
 
+    virtual action take_action(const board& before) {
+	    float max_target_value = 0;
+	    int best_op = -1;
+        for (int op : opcode) {
+            board after = before;
+            board::reward reward = after.slide(op);
+            float expected_value = evaluate_board(after);
+            if (reward != -1 && max_target_value < expected_value + (float)reward) {
+                max_target_value = expected_value + (float)reward;
+                best_op = op;
+            }
+        }
+        if (best_op != -1) {
+            update_net(before, max_target_value);
+            return action::slide(best_op);
+        } else {
+            return action();
+        }
+    }
+
 protected:
 	virtual void init_weights(const std::string& info) {
 //		net.emplace_back(65536); // create an empty weight table with size 65536
 //		net.emplace_back(65536); // create an empty weight table with size 65536
+        for (int i = 0; i < 8; i++)
+            net.emplace_back(25 * 25 * 25 * 25);
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -109,9 +132,19 @@ protected:
 		out.close();
 	}
 
+private:
+    float evaluate_board(const board& b) {
+	    return 0;
+	}
+
+	void update_net(const board& b, float reward) {
+	    return;
+	}
+
 protected:
 	std::vector<weight> net;
 	float alpha;
+	std::array<int, 4> opcode;
 };
 
 /**
