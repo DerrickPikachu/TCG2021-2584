@@ -88,28 +88,37 @@ public:
 	}
 
     virtual action take_action(const board& before) {
-	    float max_target_value = -100000;
+	    float value = -100000;
+	    board::reward best_reward = -1;
 	    int best_op = -1;
 	    board best_after;
         for (int op : {0, 1, 2, 3}) {
             board after = before;
             board::reward reward = after.slide(op);
             float expected_value = evaluate_board(after);
-            if (reward != -1 && max_target_value < expected_value + (float)reward) {
-                max_target_value = expected_value + (float)reward;
+            if (best_reward + value < (float)reward + expected_value) {
+                value = expected_value;
+                best_reward = reward;
                 best_op = op;
                 best_after = after;
             }
         }
-        if (best_op != -1) {
-            update_net(max_target_value);
-            previous_after_state = best_after;
-            return action::slide(best_op);
-        } else {
-            update_net(0);
-            return action();
-        }
+        if (best_op != -1)
+            history.push_back({best_reward, best_after});
+        return action::slide(best_op);
     }
+
+    virtual void open_episode(const std::string& flag = "") {
+	    history.clear();
+	}
+
+    virtual void close_episode(const std::string& flag = "") {
+        update_net(history.back().after, 0);
+        for (int i = history.size() - 2; i >= 0; i--) {
+            float target = evaluate_board(history[i+1].after) + history[i].reward;
+            update_net(history[i].after, target);
+        }
+	}
 
 protected:
 	virtual void init_weights(const std::string& info) {
@@ -159,17 +168,25 @@ private:
 	    return feature;
 	}
 
-	void update_net(float target) {
-	    float delta = (target - evaluate_board(previous_after_state));
-        net[0][extract_feature(previous_after_state, {0, 1, 2, 3})] += alpha * delta;
-        net[1][extract_feature(previous_after_state, {4, 5, 6, 7})] += alpha * delta;
-        net[2][extract_feature(previous_after_state, {8, 9, 10, 11})] += alpha * delta;
-        net[3][extract_feature(previous_after_state, {12, 13, 14, 15})] += alpha * delta;
-        net[4][extract_feature(previous_after_state, {0, 4, 8, 12})] += alpha * delta;
-        net[5][extract_feature(previous_after_state, {1, 5, 9, 13})] += alpha * delta;
-        net[6][extract_feature(previous_after_state, {2, 6, 10, 14})] += alpha * delta;
-        net[7][extract_feature(previous_after_state, {3, 7, 11, 15})] += alpha * delta;
+	void update_net(const board& state, float target) {
+	    float delta = (target - evaluate_board(state));
+	    float adjust = alpha * delta;
+        net[0][extract_feature(state, {0, 1, 2, 3})] += adjust;
+        net[1][extract_feature(state, {4, 5, 6, 7})] += adjust;
+        net[2][extract_feature(state, {8, 9, 10, 11})] += adjust;
+        net[3][extract_feature(state, {12, 13, 14, 15})] += adjust;
+        net[4][extract_feature(state, {0, 4, 8, 12})] += adjust;
+        net[5][extract_feature(state, {1, 5, 9, 13})] += adjust;
+        net[6][extract_feature(state, {2, 6, 10, 14})] += adjust;
+        net[7][extract_feature(state, {3, 7, 11, 15})] += adjust;
 	}
+
+	struct step {
+	    board::reward reward;
+	    board after;
+	};
+
+	std::vector<step> history;
 
 protected:
 	std::vector<weight> net;
