@@ -151,9 +151,11 @@ private:
 	}
 
 	int extract_feature(const board& b, std::vector<int> tiles) {
-	    int feature = 0;
-	    for (int i = 0; i < (int)tiles.size(); i++)
-	        feature += b(tiles[i]) * pow(25, tiles.size() - 1 - i);
+	    int feature = 0, factor = 1;
+	    for (int i = tiles.size() - 1; i >= 0; i--) {
+	        feature += b(tiles[i]) * factor;
+	        factor *= 25;
+	    }
 	    return feature;
 	}
 
