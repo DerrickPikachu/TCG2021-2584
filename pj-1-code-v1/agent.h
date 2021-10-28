@@ -115,7 +115,7 @@ public:
     virtual void close_episode(const std::string& flag = "") {
         update_net(history.back().after, 0);
         for (int i = history.size() - 2; i >= 0; i--) {
-            float target = evaluate_board(history[i+1].after) + history[i].reward;
+            float target = evaluate_board(history[i+1].after) + history[i+1].reward;
             update_net(history[i].after, target);
         }
 	}
