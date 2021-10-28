@@ -101,6 +101,7 @@ public:
                 best_after = after;
             }
         }
+        std::cout << "take action: " << best_op << std::endl;
         if (best_op != -1) {
             update_net(max_target_value);
             previous_after_state = best_after;
@@ -152,7 +153,7 @@ private:
 
 	int extract_feature(const board& b, std::vector<int> tiles) {
 	    int feature = 0;
-	    for (int i = 0; i < tiles.size(); i++)
+	    for (int i = 0; i < (int)tiles.size(); i++)
 	        feature += b(tiles[i]) * pow(25, tiles.size() - 1 - i);
 	    return feature;
 	}
