@@ -101,12 +101,12 @@ public:
                 best_after = after;
             }
         }
-        std::cout << "take action: " << best_op << std::endl;
         if (best_op != -1) {
             update_net(max_target_value);
             previous_after_state = best_after;
             return action::slide(best_op);
         } else {
+            std::cout << "end of episode" << std::endl;
             update_net(0);
             return action();
         }
