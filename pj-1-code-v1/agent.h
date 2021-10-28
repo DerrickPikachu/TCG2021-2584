@@ -122,10 +122,8 @@ public:
 
 protected:
 	virtual void init_weights(const std::string& info) {
-//		net.emplace_back(65536); // create an empty weight table with size 65536
-//		net.emplace_back(65536); // create an empty weight table with size 65536
-        for (int i = 0; i < 8; i++)
-            net.emplace_back(25 * 25 * 25 * 25);
+        for (int i = 0; i < 4; i++)
+            net.emplace_back(25 * 25 * 25 * 25 * 25);
 	}
 	virtual void load_weights(const std::string& path) {
 		std::ifstream in(path, std::ios::in | std::ios::binary);
@@ -148,14 +146,23 @@ protected:
 private:
     float evaluate_board(const board& b) {
 	    float value = 0;
-	    value += net[0][extract_feature(b, {0, 1, 2, 3})];
-        value += net[1][extract_feature(b, {4, 5, 6, 7})];
-        value += net[2][extract_feature(b, {8, 9, 10, 11})];
-        value += net[3][extract_feature(b, {12, 13, 14, 15})];
-        value += net[4][extract_feature(b, {0, 4, 8, 12})];
-        value += net[5][extract_feature(b, {1, 5, 9, 13})];
-        value += net[6][extract_feature(b, {2, 6, 10, 14})];
-        value += net[0][extract_feature(b, {3, 7, 11, 15})];
+	    board tem = b;
+	    for (int i = 0; i < 4; i++) {
+	        value += net[0][extract_feature(tem, {0, 1, 2, 3, 4})];
+	        tem.rotate_left();
+	    }
+        for (int i = 0; i < 4; i++) {
+            value += net[1][extract_feature(tem, {0, 1, 2, 3, 7})];
+            tem.rotate_left();
+        }
+        for (int i = 0; i < 4; i++) {
+            value += net[2][extract_feature(tem, {4, 5, 6, 7, 8})];
+            tem.rotate_left();
+        }
+        for (int i = 0; i < 4; i++) {
+            value += net[3][extract_feature(tem, {4, 5, 6, 7, 11})];
+            tem.rotate_left();
+        }
         return value;
 	}
 
@@ -169,16 +176,29 @@ private:
 	}
 
 	void update_net(const board& state, float target) {
-	    float delta = (target - evaluate_board(state));
-	    float adjust = alpha * delta;
-        net[0][extract_feature(state, {0, 1, 2, 3})] += adjust;
-        net[1][extract_feature(state, {4, 5, 6, 7})] += adjust;
-        net[2][extract_feature(state, {8, 9, 10, 11})] += adjust;
-        net[3][extract_feature(state, {12, 13, 14, 15})] += adjust;
-        net[4][extract_feature(state, {0, 4, 8, 12})] += adjust;
-        net[5][extract_feature(state, {1, 5, 9, 13})] += adjust;
-        net[6][extract_feature(state, {2, 6, 10, 14})] += adjust;
-        net[7][extract_feature(state, {3, 7, 11, 15})] += adjust;
+	    if (!first_state) {
+            float delta = (target - evaluate_board(previous_after_state));
+            float adjust = alpha * delta / 16;
+            board tem = previous_after_state;
+            for (int i = 0; i < 4; i++) {
+                net[0][extract_feature(tem, {0, 1, 2, 3, 4})] += adjust;
+                tem.rotate_left();
+            }
+            for (int i = 0; i < 4; i++) {
+                net[1][extract_feature(tem, {0, 1, 2, 3, 7})] += adjust;
+                tem.rotate_left();
+            }
+            for (int i = 0; i < 4; i++) {
+                net[2][extract_feature(tem, {4, 5, 6, 7, 8})] += adjust;
+                tem.rotate_left();
+            }
+            for (int i = 0; i < 4; i++) {
+                net[3][extract_feature(tem, {4, 5, 6, 7, 11})] += adjust;
+                tem.rotate_left();
+            }
+        } else {
+	        first_state = false;
+	    }
 	}
 
 	struct step {

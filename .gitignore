@@ -3,3 +3,4 @@
 CMakeLists.txt
 /pj-1-code-v1/2048
 /pj-1-code-v1/stat.txt
+*.bin
