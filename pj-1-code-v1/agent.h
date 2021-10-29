@@ -166,7 +166,6 @@ private:
 	    return feature;
 	}
 
-<<<<<<<<< Temporary merge branch 1
 	void update_net(const board& state, float target) {
         float delta = (target - evaluate_board(state));
         float adjust = alpha * delta / 16;
