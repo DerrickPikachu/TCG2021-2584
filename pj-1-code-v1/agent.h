@@ -146,20 +146,11 @@ private:
 	    board tem = b;
 	    for (int i = 0; i < 4; i++) {
 	        value += net[0][extract_feature(tem, {0, 1, 2, 3, 4})];
+            value += net[1][extract_feature(tem, {0, 1, 2, 3, 7})];
+            value += net[2][extract_feature(tem, {4, 5, 6, 7, 8})];
+            value += net[3][extract_feature(tem, {4, 5, 6, 7, 8})];
 	        tem.rotate_left();
 	    }
-        for (int i = 0; i < 4; i++) {
-            value += net[1][extract_feature(tem, {0, 1, 2, 3, 7})];
-            tem.rotate_left();
-        }
-        for (int i = 0; i < 4; i++) {
-            value += net[2][extract_feature(tem, {4, 5, 6, 7, 8})];
-            tem.rotate_left();
-        }
-        for (int i = 0; i < 4; i++) {
-            value += net[3][extract_feature(tem, {4, 5, 6, 7, 11})];
-            tem.rotate_left();
-        }
         return value;
 	}
 
@@ -179,17 +170,8 @@ private:
             board tem = previous_after_state;
             for (int i = 0; i < 4; i++) {
                 net[0][extract_feature(tem, {0, 1, 2, 3, 4})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
                 net[1][extract_feature(tem, {0, 1, 2, 3, 7})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
                 net[2][extract_feature(tem, {4, 5, 6, 7, 8})] += adjust;
-                tem.rotate_left();
-            }
-            for (int i = 0; i < 4; i++) {
                 net[3][extract_feature(tem, {4, 5, 6, 7, 11})] += adjust;
                 tem.rotate_left();
             }
