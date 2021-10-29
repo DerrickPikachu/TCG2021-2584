@@ -74,7 +74,7 @@ protected:
 class player : public agent {
 public:
 	player(const std::string& args = "") :
-	    agent("name=td_agent role=player " + args), alpha(0), episode(0) {
+	    agent("name=td_agent role=player " + args), alpha(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
