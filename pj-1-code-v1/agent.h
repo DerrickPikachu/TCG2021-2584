@@ -74,7 +74,7 @@ protected:
 class player : public agent {
 public:
 	player(const std::string& args = "") :
-	    agent("name=td_agent role=player " + args), alpha(0) {
+	    agent("name=td_agent role=player " + args), alpha(0), episode(0) {
 		if (meta.find("init") != meta.end())
 			init_weights(meta["init"]);
 		if (meta.find("load") != meta.end())
@@ -166,6 +166,7 @@ private:
 	    return feature;
 	}
 
+<<<<<<<<< Temporary merge branch 1
 	void update_net(const board& state, float target) {
         float delta = (target - evaluate_board(state));
         float adjust = alpha * delta / 16;
@@ -189,8 +190,6 @@ private:
 protected:
 	std::vector<weight> net;
 	float alpha;
-	board previous_after_state;
-	bool first_state;
 };
 
 /**
