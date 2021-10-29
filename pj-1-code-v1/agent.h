@@ -148,7 +148,7 @@ private:
 	        value += net[0][extract_feature(tem, {0, 1, 2, 3, 4})];
             value += net[1][extract_feature(tem, {0, 1, 2, 3, 7})];
             value += net[2][extract_feature(tem, {4, 5, 6, 7, 8})];
-            value += net[3][extract_feature(tem, {4, 5, 6, 7, 8})];
+            value += net[3][extract_feature(tem, {4, 5, 6, 7, 11})];
 	        tem.rotate_left();
 	    }
         return value;
