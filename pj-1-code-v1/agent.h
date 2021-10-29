@@ -89,8 +89,8 @@ public:
 
     virtual void open_episode(const std::string& flag = "") {
 	    first_state = true;
-	    if ((++episode) % 50000 == 0 && alpha != 0)
-	        alpha -= 0.02;
+	    if ((++episode) % 50000 == 0 && alpha >= 0.1)
+	        alpha -= 0.05;
 	}
 
     virtual action take_action(const board& before) {
