@@ -70,7 +70,10 @@ for i in {1..100}; do
 	tar zcvf weights.$(date +%Y%m%d-%H%M%S).tar.gz weights.bin train.log stat.txt
 done
 ```
-
+Play with my best net:
+```bash
+./2048 --total=1000 --play="load=5_tuple.bin alpha=0" --save="stat.txt"
+```
 ## Author
 
 [Computer Games and Intelligence (CGI) Lab](https://cgilab.nctu.edu.tw/), NYCU, Taiwan
